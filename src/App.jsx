@@ -1,45 +1,64 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { WalletProvider } from "./context/WalletContext";
+import ScrollToTop from "./components/ScrollToTop";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import CertificateDetail from "./pages/CertificateDetail";
 import IssueCertificate from "./pages/IssueCertificate";
 import VerifyCertificate from "./pages/VerifyCertificate";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
-    <BrowserRouter>
+    <WalletProvider>
+      <BrowserRouter>
+        <ScrollToTop />
 
-      <Routes>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
 
-        <Route
-          path="/"
-          element={<LandingPage />}
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+          <Route
+            path="/certificate/:id"
+            element={
+              <ProtectedRoute>
+                <CertificateDetail />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/certificate/:id"
-          element={<CertificateDetail />}
-        />
+          <Route
+            path="/issue"
+            element={
+              <ProtectedRoute>
+                <IssueCertificate />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/issue"
-          element={<IssueCertificate />}
-        />
+          <Route
+            path="/verify"
+            element={
+              <ProtectedRoute>
+                <VerifyCertificate />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/verify"
-          element={<VerifyCertificate />}
-        />
-
-      </Routes>
-
-    </BrowserRouter>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </WalletProvider>
   );
 }
 
